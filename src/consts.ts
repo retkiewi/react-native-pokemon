@@ -1,0 +1,21 @@
+export const SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master';
+export const TYPE_ICON_MAP = {
+    bug: require('../assets/Icon_Bug.webp'),
+    dark: require('../assets/Icon_Dark.webp'),
+    dragon: require('../assets/Icon_Dragon.webp'),
+    electric: require('../assets/Icon_Electric.webp'),
+    fairy: require('../assets/Icon_Fairy.webp'),
+    fighting: require('../assets/Icon_Fighting.webp'),
+    fire: require('../assets/Icon_Fire.webp'),
+    flying: require('../assets/Icon_Flying.webp'),
+    ghost: require('../assets/Icon_Ghost.webp'),
+    grass: require('../assets/Icon_Grass.webp'),
+    ground: require('../assets/Icon_Ground.webp'),
+    ice: require('../assets/Icon_Ice.webp'),
+    normal: require('../assets/Icon_Normal.webp'),
+    poison: require('../assets/Icon_Poison.webp'),
+    psychic: require('../assets/Icon_Psychic.webp'),
+    rock: require('../assets/Icon_Rock.webp'),
+    steel: require('../assets/Icon_Steel.webp'),
+    water: require('../assets/Icon_Water.webp'),
+}

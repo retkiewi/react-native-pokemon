@@ -12,6 +12,7 @@
     "@apollo/client": "^3.7.9",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "easy-peasy": "^5.2.0",
     "expo": "~48.0.5",
     "expo-status-bar": "~1.4.4",
     "graphql": "^16.6.0",

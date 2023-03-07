@@ -1,29 +1,51 @@
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useQuery, gql} from '@apollo/client';
 import IconButton from '../components/IconButton';
+import DexEntryItem from '../components/DexEntryItem';
+import { useCallback } from 'react';
 
 const GET_ALL_POKEMON = gql`
- query samplePokeAPIquery($offset: Int, $limit: Int) {
-  gen3_species: pokemon_v2_pokemonspecies(order_by: {id: asc}, offset: $offset, limit: $limit) {
-    name
+  query allPokemon($offset: Int, $limit: Int) {
+   pokemon_v2_pokemon {
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
     id
+    name
   }
 }
 `
 
-const Item = ({name}: any) => (
-    <View>
-        <Text style={styles.item}>{name}</Text>
-    </View>
-);
-
-export default function DexScreen() {
+export default function DexScreen({navigation}: any) {
     const {loading, error, data, fetchMore } = useQuery(GET_ALL_POKEMON, {
         variables: {
             offset: 0,
-            limit: 10,
+            limit: 30,
         },
     });
+
+    const onEnd = useCallback(() =>{
+        console.warn('fetch more');
+        fetchMore({
+        variables:{
+            offset: data.pokemon_v2_pokemonspecies.length,
+            length: 5,
+        }})
+    },[fetchMore, data]);
+
+    const renderDexItem = useCallback(({item}: any) => (
+        <DexEntryItem 
+         id={item.id}
+         name={item.name} 
+         onPress={() => {
+         navigation.navigate('Details', {
+         pokemonId: item.id,
+         })}}
+         types={item.pokemon_v2_pokemontypes.map((typeObj: any) => typeObj.pokemon_v2_type.name)}
+        />
+    ), [])
 
     if(loading) return (
         <View style={styles.dexContainer}>
@@ -33,24 +55,19 @@ export default function DexScreen() {
 
     if(error) return (
         <View style={styles.dexContainer}>
-            <Text>Error {error.message}</Text>
+            <Text>Error {error.message} {error.extraInfo}</Text>
         </View>
     );
 
     return (
-        <View style={styles.dexContainer}>
-            <IconButton onPress={() => console.log(data)}/>
-            <FlatList
-             data={data.gen3_species}
-             renderItem={({item}) => <Item name={item.name} />}
+        <FlatList
+            style={styles.dexContainer}
+             data={data.pokemon_v2_pokemon}
+             renderItem={renderDexItem}
              keyExtractor={item => item.id}
-             onEndReached={() => fetchMore({
-                variables:{
-                    offset: data.feed.length,
-                },
-             })}
+             onEndReachedThreshold={0.5}
+             onEndReached={onEnd}
             />
-        </View>
     );
 }
 
@@ -60,10 +77,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#ddd',
         paddingTop: 10,
     },
-    item: {
-        backgroundColor: '#b0b0b0',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
-    },
+    
 });
